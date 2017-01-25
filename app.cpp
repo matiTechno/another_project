@@ -19,7 +19,7 @@ App::App():
     std::cout << "glfw compile time info: " << glfwGetVersionString() << std::endl;
 
     int major, minor, revision;
-    glfwGetVersion(&major, &minor, &revision);
+    glfwGetVersion(d&major, &minor, &revision);
     std::string version = std::to_string(major) + '.' + std::to_string(minor) + '.' + std::to_string(revision);
     std::cout << "runtime glfw version: " + version << std::endl;
 
