@@ -28,6 +28,7 @@ App::App():
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_SAMPLES, 4);
     window = glfwCreateWindow(640, 480, "My Title", nullptr, nullptr);
 
     if(!window)
@@ -37,6 +38,14 @@ App::App():
 
     if(!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
         throw std::runtime_error("[glad initialization failed]");
+
+    std::cout << "vendor: " << glGetString(GL_VENDOR) << std::endl;
+    std::cout << "renderer: " << glGetString(GL_RENDERER) << std::endl;
+    std::cout << "gl version: " << glGetString(GL_VERSION) << std::endl;
+
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, width, height);
 
     glfwSwapInterval(1);
 
