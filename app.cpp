@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <chrono>
+#include <string>
 
 void error_callback(int error, const char* description)
 {
@@ -14,6 +15,13 @@ App::App():
     isRunning(true)
 {
     glfwSetErrorCallback(error_callback);
+
+    std::cout << "glfw compile time info: " << glfwGetVersionString() << std::endl;
+
+    int major, minor, revision;
+    glfwGetVersion(&major, &minor, &revision);
+    std::string version = std::to_string(major) + '.' + std::to_string(minor) + '.' + std::to_string(revision);
+    std::cout << "runtime glfw version: " + version << std::endl;
 
     if(!glfwInit())
         throw std::runtime_error("[glfw initialization failed]");
