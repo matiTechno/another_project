@@ -13,4 +13,6 @@ SOURCES += main.cpp \
 
 HEADERS += \
     glad.h \
-    app.hpp
+    app.hpp \
+    input.hpp \
+    mouse.hpp

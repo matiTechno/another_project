@@ -5,15 +5,23 @@
 #include <iostream>
 #include <chrono>
 #include <string>
+#include <cassert>
 
 void error_callback(int error, const char* description)
 {
     std::cout << "[Error: " << error << ", " << description << ']' << std::endl;
 }
 
+bool App::instance = false;
+Input<int, std::hash<int>> App::keys;
+Mouse App::mouse;
+
 App::App():
     isRunning(true)
 {
+    assert(!instance);
+    instance = true;
+
     glfwSetErrorCallback(error_callback);
 
     std::cout << "glfw compile time info: " << glfwGetVersionString() << std::endl;
@@ -48,6 +56,15 @@ App::App():
     glViewport(0, 0, width, height);
 
     glfwSwapInterval(1);
+
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetCursorPosCallback(window, cursor_position_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetCursorEnterCallback(window, cursor_enter_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetWindowFocusCallback(window, window_focus_callback);
+    glfwSetWindowCloseCallback(window, window_close_callback);
 
     setOpengl();
     run();
@@ -84,6 +101,9 @@ void App::run()
 
 void App::processInput()
 {
+    keys.begin_new_frame();
+    mouse.begin_new_frame();
+
     glfwPollEvents();
 
     if(glfwWindowShouldClose(window))
@@ -99,4 +119,62 @@ void App::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glfwSwapBuffers(window);
+}
+
+void App::key_callback(GLFWwindow*, int key, int, int action, int)
+{
+    if(action == GLFW_PRESS)
+        keys.pressEvent(key);
+    else if(action == GLFW_RELEASE)
+        keys.releaseEvent(key);
+}
+
+void App::mouse_button_callback(GLFWwindow*, int button, int action, int)
+{
+    if(action == GLFW_PRESS)
+        mouse.buttons.pressEvent(button);
+    else if(action == GLFW_RELEASE)
+        mouse.buttons.releaseEvent(button);
+}
+
+void App::cursor_position_callback(GLFWwindow*, double xpos, double ypos)
+{
+    mouse.position.x = static_cast<float>(xpos);
+    mouse.position.y = static_cast<float>(ypos);
+}
+
+void App::scroll_callback(GLFWwindow*, double, double yoffset)
+{
+    mouse.scroll_delta = static_cast<float>(yoffset);
+}
+
+void App::cursor_enter_callback(GLFWwindow*, int entered)
+{
+    if(entered)
+        mouse.hasEntered = true;
+    else
+        mouse.hasLeft = true;
+}
+
+void App::framebuffer_size_callback(GLFWwindow*, int width, int height)
+{
+    (void)width;
+    (void)(height);
+}
+
+void App::window_focus_callback(GLFWwindow*, int focused)
+{
+    if(focused)
+    {
+
+    }
+    else
+    {
+
+    }
+}
+
+void App::window_close_callback(GLFWwindow*)
+{
+
 }
