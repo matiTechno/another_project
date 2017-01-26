@@ -6,6 +6,8 @@
 #include <chrono>
 #include <string>
 #include <cassert>
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw_gl3.h>
 
 void error_callback(int error, const char* description)
 {
@@ -51,10 +53,6 @@ App::App():
     std::cout << "renderer: " << glGetString(GL_RENDERER) << std::endl;
     std::cout << "gl version: " << glGetString(GL_VERSION) << std::endl;
 
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    glViewport(0, 0, width, height);
-
     glfwSwapInterval(1);
 
     glfwSetKeyCallback(window, key_callback);
@@ -82,11 +80,20 @@ void App::setOpengl()
 
 void App::run()
 {
+    ImGui_ImplGlfwGL3_Init(window, true);
+
     auto currentTime = std::chrono::high_resolution_clock::now();
 
     while(isRunning)
     {
         processInput();
+
+        ImGui_ImplGlfwGL3_NewFrame();
+        ImGui::ShowTestWindow();
+
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        glViewport(0, 0, width, height);
 
         auto newTime = std::chrono::high_resolution_clock::now();
         auto frameTime = std::chrono::duration_cast<std::chrono::duration<float>>(newTime - currentTime).count();
@@ -118,6 +125,7 @@ void App::update(float dt)
 void App::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+    ImGui::Render();
     glfwSwapBuffers(window);
 }
 

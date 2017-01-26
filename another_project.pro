@@ -9,10 +9,21 @@ LIBS += -lglfw -lGL -ldl
 
 SOURCES += main.cpp \
     glad.c \
-    app.cpp
+    app.cpp \
+    imgui/imgui.cpp \
+    imgui/imgui_demo.cpp \
+    imgui/imgui_draw.cpp \
+    imgui/imgui_impl_glfw_gl3.cpp
 
 HEADERS += \
     glad.h \
     app.hpp \
     input.hpp \
-    mouse.hpp
+    mouse.hpp \
+    imgui/imconfig.h \
+    imgui/imgui.h \
+    imgui/imgui_impl_glfw_gl3.h \
+    imgui/imgui_internal.h \
+    imgui/stb_rect_pack.h \
+    imgui/stb_textedit.h \
+    imgui/stb_truetype.h
