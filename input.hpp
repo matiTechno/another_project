@@ -19,6 +19,12 @@ public:
 
     bool wasReleased(T code) const;
 
+    const std::unordered_map<T, bool, Hash>& get_map_wasPressed() const;
+
+    const std::unordered_map<T, bool, Hash>& get_map_isPressed() const;
+
+    const std::unordered_map<T, bool, Hash>& get_map_wasReleased() const;
+
 private:
     std::unordered_map<T, bool, Hash> map_wasPressed;
     std::unordered_map<T, bool, Hash> map_isPressed;
@@ -71,6 +77,24 @@ bool Input<T, Hash>::wasReleased(T code) const
     if(i == map_wasReleased.end())
         return false;
     return true;
+}
+
+template<typename T, typename Hash>
+const std::unordered_map<T, bool, Hash>& Input<T, Hash>::get_map_wasPressed() const
+{
+    return map_wasPressed;
+}
+
+template<typename T, typename Hash>
+const std::unordered_map<T, bool, Hash>& Input<T, Hash>::get_map_isPressed() const
+{
+    return map_isPressed;
+}
+
+template<typename T, typename Hash>
+const std::unordered_map<T, bool, Hash>& Input<T, Hash>::get_map_wasReleased() const
+{
+    return map_wasReleased;
 }
 
 #endif // INPUT_HPP

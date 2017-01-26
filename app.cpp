@@ -70,6 +70,7 @@ App::App():
 
 App::~App()
 {
+    ImGui_ImplGlfwGL3_Shutdown();
     glfwTerminate();
 }
 
@@ -88,12 +89,16 @@ void App::run()
     {
         processInput();
 
-        ImGui_ImplGlfwGL3_NewFrame();
+        ImGui_ImplGlfwGL3_NewFrame(mouse, keys);
         ImGui::ShowTestWindow();
 
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        glViewport(0, 0, width, height);
+        ImGui::Begin("Another Window");
+        ImGui::Text("Hello");
+        if(ImGui::Button("exit"))
+        {
+            isRunning = false;
+        }
+        ImGui::End();
 
         auto newTime = std::chrono::high_resolution_clock::now();
         auto frameTime = std::chrono::duration_cast<std::chrono::duration<float>>(newTime - currentTime).count();
@@ -115,6 +120,10 @@ void App::processInput()
 
     if(glfwWindowShouldClose(window))
         isRunning = false;
+
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, width, height);
 }
 
 void App::update(float dt)
