@@ -7,6 +7,8 @@ QMAKE_CXXFLAGS += -pedantic
 
 LIBS += -lglfw -lGL -ldl
 
+INCLUDEPATH +=
+
 SOURCES += main.cpp \
     glad.c \
     app.cpp \
